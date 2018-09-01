@@ -9,15 +9,24 @@ class CommandLine(threading.Thread):
         self.__file_monitors = dict()
         self.__check_status = False
 
-    def __help(self):
-        pass
+    @staticmethod
+    def __help(user_command):
+        print('''
+        create-file-monitor [file monitor title] [path to file monitor]
+        remove-file-monitor [file monitor title]
+        start-file-monitor [file monitor title]
+        stop-file-monitor [file monitor title]
+        list - show all file monitors and theirs paths
+        stop - stop application
+        ''')
 
     def __stop(self, user_command):
         self.__check_status = False
+        return True
 
     @staticmethod
     def __file_monitor_doesnt_exist_error_message(title):
-        print('A monitor', title, 'does not exist.\n')
+        print("A monitor", title, "doesn't exist.\n")
 
     @staticmethod
     def __command_error_message():
@@ -74,7 +83,7 @@ class CommandLine(threading.Thread):
         if len(user_command) == 0:
             print('Name:\tPath:')
             for file_monitor_key in self.__file_monitors:
-                print(file_monitor_key, '\t', self.__file_monitors[file_monitor_key].folder_path_str)
+                print(file_monitor_key, '\t', self.__file_monitors[file_monitor_key].get_path())
                 print()
             return True
         return False

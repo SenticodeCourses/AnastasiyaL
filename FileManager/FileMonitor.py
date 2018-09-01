@@ -8,8 +8,9 @@ class FileMonitor(threading.Thread):
     def __init__(self, title, folder_path):
         threading.Thread.__init__(self)
         self.title = title
-        self.folder_path_str = folder_path
-        self.previous_folder_condition = None
+        self.__folder_path_str = folder_path
+        os.chdir(self.__folder_path_str)
+        self.previous_folder_condition = set(os.listdir('.'))
         self.check_status = False
 
     def __check_files(self):
@@ -27,8 +28,7 @@ class FileMonitor(threading.Thread):
                 print(file, '\n')
 
     def run(self):
-        os.chdir(self.folder_path_str)
-        self.previous_folder_condition = set(os.listdir('.'))
+        os.chdir(self.__folder_path_str)
         self.check_status = True
         while self.check_status:
             time.sleep(0.3)
@@ -36,3 +36,6 @@ class FileMonitor(threading.Thread):
 
     def stop(self):
         self.check_status = False
+
+    def get_path(self):
+        return self.__folder_path_str
